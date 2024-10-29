@@ -33,9 +33,13 @@ int main()
     Vector2 nebula_pos;
     nebula_pos.x = window_width;
     nebula_pos.y = window_height - nebula_rec.height;
+    //Nebula animation properties
+    int nebula_frame {};
+    const float nebula_update_time {1.0f/12.0f};
+    float nebula_running_time {0.0f};
     
     //Nebula Velocity
-    int nebula_vel {-600};
+    int nebula_vel {-200};
 
     //Animation frame
     int frame{};
@@ -64,13 +68,13 @@ int main()
         //Perform ground check
         if (scarfy_pos.y >= window_height - scarfy_rec.height)
         {
-            //rectangle is on the ground
+            //Scarfy is on the ground
             velocity = 0;
             is_in_air = false;
         }
         else
         {
-            // rectangle is on air
+            // Scarfy is on air
             //Apply gravity 
             velocity += gravity * dT;
             is_in_air = true;
@@ -87,8 +91,22 @@ int main()
 
         //Update Nebula position
         nebula_pos.x += nebula_vel * dT;
+
+        //Update Nebula running time, set frame speed
+        nebula_running_time += dT;
+        if (nebula_running_time >= nebula_update_time)
+        {
+            nebula_running_time = 0.0f;
+            //Update animation frame
+            nebula_rec.x = nebula_frame * nebula_rec.width;
+            nebula_frame++;
+            if(nebula_frame > 7)
+            {
+                nebula_frame = 0;
+            }
+        }
         
-        // Update running time, set frame speed
+        // Update Scarfy running time, set frame speed
         running_time += dT; 
         if (running_time >= update_time)
         {
