@@ -94,15 +94,19 @@ int main()
         {
             running_time = 0.0f; // reset frame loop
 
-            //Update animation frame
-            scarfy_rec.x = frame * scarfy_rec.width;
-            frame++;
-            if (frame > 5)
+            if (!is_in_air) // check if it's jumping and freezes frame
             {
-                frame = 0;
+                //Update animation frame
+                scarfy_rec.x = frame * scarfy_rec.width;
+                frame++;
+                if (frame > 5 )
+                {
+                    frame = 0;
+                }
             }
-        }
-
+    
+            }
+            
         //Draw Nebula
         DrawTextureRec(nebula,nebula_rec,nebula_pos,WHITE);
         
