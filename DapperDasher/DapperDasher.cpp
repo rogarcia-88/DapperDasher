@@ -8,6 +8,12 @@ struct anim_data
     float update_time;
     float running_time;
 };
+
+bool is_grounded(anim_data data, int windowHeight)
+{
+    return data.pos.y >= windowHeight - data.rec.height;
+}
+
 int main()
 {
     int window_dimensions[2];
@@ -83,7 +89,7 @@ int main()
         const float dT{ GetFrameTime()};
           
         //Perform ground check
-        if (scarfy_data.pos.y >= window_dimensions[1] - scarfy_data.rec.height)
+        if (is_grounded(scarfy_data, window_dimensions[1]))
         {
             //Scarfy is on the ground
             velocity = 0;
