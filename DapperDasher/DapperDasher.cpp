@@ -41,7 +41,7 @@ int main()
     // Nebula properties
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
 
-    const int size_of_nebulae{ 3};
+    const int size_of_nebulae{ 6};
     
     // Array of nebulae properties   
     anim_data nebulae[size_of_nebulae]{};
@@ -52,15 +52,13 @@ int main()
         nebulae[i].rec.y = 0;
         nebulae[i].rec.width = nebula.width/8;
         nebulae[i].rec.height = nebula.height/8;
+        nebulae[i].pos.x = window_dimensions[0] + i * 300;
         nebulae[i].pos.y = window_dimensions[1] - nebula.height/8;
         nebulae[i].frame = 0;
         nebulae[i].running_time = 0.0f;
         nebulae[i].update_time = 1.0/16.0;
     }
 
-    nebulae[0].pos.x = window_dimensions[0];
-    nebulae[1].pos.x = window_dimensions[0] + 300;
-    nebulae[2].pos.x = window_dimensions[0] + 600;
     
     //Nebula Velocity
     int nebula_vel {-200};
