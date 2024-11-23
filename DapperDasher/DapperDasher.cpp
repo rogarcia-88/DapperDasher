@@ -41,24 +41,26 @@ int main()
     // Nebula properties
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
 
-    // Nebula AnimData
-    anim_data nebula_data {
-        {0,0,nebula.width/8,nebula.height/8}, //Rectangle rec
-        {window_dimensions[0], window_dimensions[1] - nebula.height/8}, // Vector2 pos
-        0, //int frame
-        1.0 / 12.0, //float update time
-        0 //float running time
-    };
-
-    anim_data nebula2_data {
-    {0, 0, nebula.width/8,nebula.height/8 },
-    {window_dimensions[0] + 300, window_dimensions[1] - nebula.height/8},
-    0,
-    1.0 / 16.0,
-    0
-        
-    };
+    const int size_of_nebulae{ 3};
     
+    // Array of nebulae properties   
+    anim_data nebulae[size_of_nebulae]{};
+
+    for (int i = 0; i < size_of_nebulae; i++)
+    {
+        nebulae[i].rec.x = 0;
+        nebulae[i].rec.y = 0;
+        nebulae[i].rec.width = nebula.width/8;
+        nebulae[i].rec.height = nebula.height/8;
+        nebulae[i].pos.y = window_dimensions[1] - nebula.height/8;
+        nebulae[i].frame = 0;
+        nebulae[i].running_time = 0.0f;
+        nebulae[i].update_time = 1.0/16.0;
+    }
+
+    nebulae[0].pos.x = window_dimensions[0];
+    nebulae[1].pos.x = window_dimensions[0] + 300;
+    nebulae[2].pos.x = window_dimensions[0] + 600;
     
     //Nebula Velocity
     int nebula_vel {-200};
@@ -106,38 +108,12 @@ int main()
         // Update scarfy position
         scarfy_data.pos.y += velocity * dT;
 
-        //Update Nebula position
-        nebula_data.pos.x += nebula_vel * dT;
+        for (int i = 0; i < size_of_nebulae; i++)
+        {
+            //Update Nebula position
+            nebulae[i].pos.x += nebula_vel * dT;
+        }
         
-        //Update Nebula 2 position
-        nebula2_data.pos.x += nebula_vel * dT;
-
-        //Update Nebula running time, set frame speed
-        nebula_data.running_time += dT;
-        if (nebula_data.running_time >= nebula_data.update_time)
-        {
-            nebula_data.running_time = 0.0f;
-            //Update animation frame
-            nebula_data.rec.x = nebula_data.frame * nebula_data.rec.width;
-            nebula_data.frame++;
-            if(nebula_data.frame > 7)
-            {
-                nebula_data.frame = 0;
-            }
-        }
-
-        //Update Nebula running time, set frame speed
-        nebula2_data.running_time += dT;
-        if (nebula2_data.running_time >= nebula2_data.update_time)
-        {
-            nebula2_data.running_time = 0.0f;
-            nebula2_data.rec.x = nebula2_data.frame * nebula2_data.rec.width;
-            nebula2_data.frame++;
-            if(nebula2_data.frame > 7)
-            {
-                nebula2_data.frame = 0;
-            }
-        }
         
         // Update Scarfy running time, set frame speed
         scarfy_data.running_time += dT; 
@@ -155,14 +131,30 @@ int main()
                     scarfy_data.frame = 0;
                 }
             }
-    
-            }
-            
-        //Draw Nebula
-        DrawTextureRec(nebula,nebula_data.rec,nebula_data.pos,WHITE);
-
-        //Draw Nebula2
-        DrawTextureRec(nebula,nebula2_data.rec,nebula2_data.pos,WHITE);
+        }
+        
+        for (int i = 0; i < size_of_nebulae; i++)
+        {
+            //Update Nebula running time, set frame speed
+            nebulae[i].running_time += dT;
+            if (nebulae[i].running_time >= nebulae[i].update_time)
+            {
+                nebulae[i].running_time = 0.0f;
+                //Update animation frame
+                nebulae[i].rec.x = nebulae[i].frame * nebulae[i].rec.width;
+                nebulae[i].frame++;
+                if(nebulae[i].frame > 7)
+                {
+                    nebulae[i].frame = 0;
+                }
+            }  
+        }
+       
+       for (int i = 0; i < size_of_nebulae; i++)
+       {
+           //Draw Nebula
+           DrawTextureRec(nebula,nebulae[i].rec,nebulae[i].pos,WHITE);
+       }     
         
         //Draw Scarfy
         DrawTextureRec(scarfy,scarfy_data.rec,scarfy_data.pos,WHITE);
