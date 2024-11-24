@@ -86,7 +86,7 @@ int main()
         nebulae[i].update_time = 1.0/16.0;
     }
 
-    
+    float finish_line { nebulae[size_of_nebulae -1].pos.x };
     //Nebula Velocity
     int nebula_vel {-200};
    
@@ -194,6 +194,9 @@ int main()
         {
             nebulae[i].pos.x += nebula_vel * dT;
         }
+
+        //Update Finish Line
+        finish_line += nebula_vel * dT;
         
         //Update Nebula running time, set frame speed
         for (int i = 0; i < size_of_nebulae; i++)
