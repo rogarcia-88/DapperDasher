@@ -99,20 +99,33 @@ int main()
 
     // Background
     Texture2D background = LoadTexture("textures/far-buildings.png");
-    Vector2 background_pos {0.0,0.0};
+    float background_tiling {};
+   
+    
     
     SetTargetFPS(60);
 
     while (!WindowShouldClose())
     {
+        //Get Delta Time (time since last frame)
+        const float dT{ GetFrameTime()};
+        
         // Start Drawing
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawTextureEx(background, background_pos, 0.0, 2, WHITE);
 
-        //Get Delta Time (time since last frame)
-        const float dT{ GetFrameTime()};
-          
+        // Draw the background
+        background_tiling -= 20 * dT;
+        if (background_tiling <= -background.width*2)
+        {
+            background_tiling = 0.0;
+        }
+        
+        Vector2 background1_pos {background_tiling,0.0};
+        DrawTextureEx(background, background1_pos, 0.0, 2, WHITE);
+        Vector2 background2_pos {background_tiling + background.width*2,0.0};
+        DrawTextureEx(background, background2_pos, 0.0, 2, WHITE);
+                
         //Perform ground check
         if (is_grounded(scarfy_data, window_dimensions[1]))
         {
