@@ -101,7 +101,13 @@ int main()
     Texture2D background = LoadTexture("textures/far-buildings.png");
     float background_tiling {};
    
+    //Midground
+    Texture2D midground = LoadTexture("textures/back-buildings.png");
+    float midground_tiling {};
     
+    //Foreground
+    Texture2D foreground = LoadTexture("textures/foreground.png");
+    float foreground_tiling {};
     
     SetTargetFPS(60);
 
@@ -114,17 +120,44 @@ int main()
         BeginDrawing();
         ClearBackground(WHITE);
 
-        // Draw the background
+        // Scroll background 
         background_tiling -= 20 * dT;
-        if (background_tiling <= -background.width*2)
+        if (background_tiling <= -background.width*2) 
         {
-            background_tiling = 0.0;
+            background_tiling = 0.0; // background loop
+        }
+
+        // Scroll midground 
+        midground_tiling -= 40 * dT;
+        if (midground_tiling <= -midground.width*2) 
+        {
+            midground_tiling = 0.0; // midground loop
+        }
+
+        // Scroll foreground 
+        foreground_tiling -= 80 * dT;
+        if (foreground_tiling <= -foreground.width*2) 
+        {
+            foreground_tiling = 0.0; // foreground loop
         }
         
+        // Draw the background
         Vector2 background1_pos {background_tiling,0.0};
         DrawTextureEx(background, background1_pos, 0.0, 2, WHITE);
         Vector2 background2_pos {background_tiling + background.width*2,0.0};
         DrawTextureEx(background, background2_pos, 0.0, 2, WHITE);
+
+        // Draw the midground
+        Vector2 midground1_pos {midground_tiling,0.0};
+        DrawTextureEx(midground, midground1_pos, 0.0, 2, WHITE);
+        Vector2 midground2_pos {midground_tiling + midground.width*2,0.0};
+        DrawTextureEx(midground, midground2_pos, 0.0, 2, WHITE);
+
+        // Draw the foreground
+        Vector2 foreground1_pos {foreground_tiling,0.0};
+        DrawTextureEx(foreground, foreground1_pos, 0.0, 2, WHITE);
+        Vector2 foreground2_pos {foreground_tiling + foreground.width*2,0.0};
+        DrawTextureEx(foreground, foreground2_pos, 0.0, 2, WHITE);
                 
         //Perform ground check
         if (is_grounded(scarfy_data, window_dimensions[1]))
@@ -180,8 +213,12 @@ int main()
         // Stop Drawing
         EndDrawing();
     }
+    
     UnloadTexture(scarfy); 
     UnloadTexture(nebula);
     UnloadTexture(background);
+    UnloadTexture(midground);
+    UnloadTexture(foreground);
+    
     CloseWindow();
 }
