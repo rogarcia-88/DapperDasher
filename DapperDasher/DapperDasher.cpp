@@ -89,7 +89,6 @@ int main()
     
     //Nebula Velocity
     int nebula_vel {-200};
-
    
     // is the rectangle in the air?
     bool is_in_air;
@@ -97,6 +96,10 @@ int main()
     constexpr int jump_vel{ -600 };
 
     int velocity{ 0 };
+
+    // Background
+    Texture2D background = LoadTexture("textures/far-buildings.png");
+    Vector2 background_pos {0.0,0.0};
     
     SetTargetFPS(60);
 
@@ -105,6 +108,7 @@ int main()
         // Start Drawing
         BeginDrawing();
         ClearBackground(WHITE);
+        DrawTextureEx(background, background_pos, 0.0, 2, WHITE);
 
         //Get Delta Time (time since last frame)
         const float dT{ GetFrameTime()};
@@ -164,6 +168,7 @@ int main()
         EndDrawing();
     }
     UnloadTexture(scarfy); 
-    UnloadTexture(nebula); 
+    UnloadTexture(nebula);
+    UnloadTexture(background);
     CloseWindow();
 }
