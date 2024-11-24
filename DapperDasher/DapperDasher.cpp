@@ -1,5 +1,6 @@
 #include "raylib.h"
 
+// Base struct for sprites properties
 struct anim_data
 {
     Rectangle rec;
@@ -9,14 +10,34 @@ struct anim_data
     float running_time;
 };
 
+// Ground check function
 bool is_grounded(anim_data data, int windowHeight)
 {
     return data.pos.y >= windowHeight - data.rec.height;
 }
 
+// Update animation function
+anim_data update_anim_data(anim_data data, float delta_time, int max_frame)
+{
+    //update anim frame
+    data.running_time += delta_time;
+    if (data.running_time >= data.update_time)
+    {
+        data.running_time = 0.0;
+        // update animation frame
+        data.rec.x = data.frame * data.rec.width;
+        data.frame++;
+        if (data.frame >= max_frame)
+        {
+            data.frame = 0;
+        }
+    }
+    return data;
+}
+
 int main()
 {
-    int window_dimensions[2];
+    int window_dimensions[2]; 
     window_dimensions[0] = 512;
     window_dimensions[1] = 380;
     
@@ -44,10 +65,10 @@ int main()
     scarfy_data.running_time = 0.0f;
     
     
-    // Nebula properties
+    // Nebulae properties
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
 
-    const int size_of_nebulae{ 6};
+    const int size_of_nebulae{ 6}; // Edit for increase the amount of spawned nebulae
     
     // Array of nebulae properties   
     anim_data nebulae[size_of_nebulae]{};
@@ -103,7 +124,7 @@ int main()
             is_in_air = true;
         }
 
-        // Rectangle Jump on key
+        // Scarfy Jump on key
         if (IsKeyPressed(KEY_SPACE) && !is_in_air) 
          {
             velocity += jump_vel;
@@ -112,9 +133,10 @@ int main()
         // Update scarfy position
         scarfy_data.pos.y += velocity * dT;
 
+        //Update Nebula position
         for (int i = 0; i < size_of_nebulae; i++)
         {
-            //Update Nebula position
+            
             nebulae[i].pos.x += nebula_vel * dT;
         }
         
@@ -136,10 +158,10 @@ int main()
                 }
             }
         }
-        
+
+        //Update Nebula running time, set frame speed
         for (int i = 0; i < size_of_nebulae; i++)
         {
-            //Update Nebula running time, set frame speed
             nebulae[i].running_time += dT;
             if (nebulae[i].running_time >= nebulae[i].update_time)
             {
@@ -153,11 +175,11 @@ int main()
                 }
             }  
         }
-       
+
+        //Draw Nebulae
        for (int i = 0; i < size_of_nebulae; i++)
        {
-           //Draw Nebula
-           DrawTextureRec(nebula,nebulae[i].rec,nebulae[i].pos,WHITE);
+            DrawTextureRec(nebula,nebulae[i].rec,nebulae[i].pos,WHITE);
        }     
         
         //Draw Scarfy
