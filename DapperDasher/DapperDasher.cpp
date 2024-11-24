@@ -133,6 +133,11 @@ int main()
         // Update scarfy position
         scarfy_data.pos.y += velocity * dT;
 
+        if (!is_in_air)
+        {
+            scarfy_data = update_anim_data(scarfy_data, dT, 5);
+        }
+
         //Update Nebula position
         for (int i = 0; i < size_of_nebulae; i++)
         {
@@ -140,25 +145,6 @@ int main()
             nebulae[i].pos.x += nebula_vel * dT;
         }
         
-        
-        // Update Scarfy running time, set frame speed
-        scarfy_data.running_time += dT; 
-        if (scarfy_data.running_time >= scarfy_data.update_time)
-        {
-            scarfy_data.running_time = 0.0f; // reset frame loop
-
-            if (!is_in_air) // check if it's jumping and freezes frame
-            {
-                //Update animation frame
-                scarfy_data.rec.x = scarfy_data.frame * scarfy_data.rec.width;
-                scarfy_data.frame++;
-                if (scarfy_data.frame > 5 )
-                {
-                    scarfy_data.frame = 0;
-                }
-            }
-        }
-
         //Update Nebula running time, set frame speed
         for (int i = 0; i < size_of_nebulae; i++)
         {
