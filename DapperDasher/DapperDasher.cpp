@@ -68,7 +68,7 @@ int main()
     // Nebulae properties
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
 
-    const int size_of_nebulae{ 30}; // Edit for increase the amount of spawned nebulae
+    const int size_of_nebulae{ 5}; // Edit for increase the amount of spawned nebulae
     
     // Array of nebulae properties   
     anim_data nebulae[size_of_nebulae]{};
@@ -234,6 +234,12 @@ int main()
         if (collision)
         {
             // Lose the game
+            DrawText("Game Over!", window_dimensions[0]/4, window_dimensions[1]/2, 40, WHITE);
+        }
+        else if (scarfy_data.pos.x >= finish_line)
+        {
+            // Win the game
+            DrawText("You win!", window_dimensions[0]/2, window_dimensions[1]/2, 40, WHITE);
         }
         else
         {
