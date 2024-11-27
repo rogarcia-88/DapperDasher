@@ -68,7 +68,7 @@ int main()
     // Nebulae properties
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
 
-    const int size_of_nebulae{ 6}; // Edit for increase the amount of spawned nebulae
+    const int size_of_nebulae{ 30}; // Edit for increase the amount of spawned nebulae
     
     // Array of nebulae properties   
     anim_data nebulae[size_of_nebulae]{};
@@ -108,6 +108,8 @@ int main()
     //Foreground
     Texture2D foreground = LoadTexture("textures/foreground.png");
     float foreground_tiling {};
+
+    bool collision{};
     
     SetTargetFPS(60);
 
@@ -204,14 +206,47 @@ int main()
             nebulae[i] = update_anim_data(nebulae[i], dT, 7);
         }
 
-        //Draw Nebulae
-       for (int i = 0; i < size_of_nebulae; i++)
-       {
-            DrawTextureRec(nebula,nebulae[i].rec,nebulae[i].pos,WHITE);
-       }     
+        // Check collisions
         
-        //Draw Scarfy
-        DrawTextureRec(scarfy,scarfy_data.rec,scarfy_data.pos,WHITE);
+        for (anim_data nebula : nebulae)
+        {
+            float pad {50.0};  // this trims the offset of the sprite
+            Rectangle nebula_rect{ // create a rectangle to sample the position pf the nebula
+            nebula.pos.x + pad,
+            nebula.pos.y + pad,
+            nebula.rec.width - 2 * pad,
+            nebula.rec.height - 2 * pad
+            };
+
+            Rectangle scarfy_rect{
+            scarfy_data.pos.x,
+            scarfy_data.pos.y,
+            scarfy_data.rec.width,
+            scarfy_data.rec.height
+            };
+
+            if (CheckCollisionRecs(nebula_rect, scarfy_rect))
+            {
+                collision = true;
+            }
+        }
+
+        if (collision)
+        {
+            // Lose the game
+        }
+        else
+        {
+            //Draw Nebulae
+            for (int i = 0; i < size_of_nebulae; i++)
+            {
+              DrawTextureRec(nebula,nebulae[i].rec,nebulae[i].pos,WHITE);
+            }     
+        
+            //Draw Scarfy
+            DrawTextureRec(scarfy,scarfy_data.rec,scarfy_data.pos,WHITE);
+        }
+       
         
         // Stop Drawing
         EndDrawing();
